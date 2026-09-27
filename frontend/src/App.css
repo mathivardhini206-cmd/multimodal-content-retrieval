@@ -1,0 +1,1230 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #1f2937;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  padding: 50px 20px 30px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.header p {
+  margin-top: 10px;
+  color: #6b7280;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 35px auto;
+}
+
+.video-card,
+.question-card,
+.answer-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.video-placeholder {
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #eef1f7;
+  border-radius: 12px;
+}
+
+.video-placeholder span {
+  font-size: 55px;
+}
+
+.video-placeholder h2 {
+  margin: 15px 0 5px;
+}
+
+.video-placeholder p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.question-card h2,
+.answer-card h2 {
+  margin-top: 0;
+}
+
+.input-area {
+  display: flex;
+  gap: 12px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.input-area input:focus {
+  border-color: #6366f1;
+}
+
+.input-area button {
+  padding: 14px 25px;
+  border: none;
+  border-radius: 10px;
+  background: #6366f1;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-area button:hover {
+  opacity: 0.9;
+}
+
+.input-area button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.answer-card {
+  border-left: 5px solid #6366f1;
+}
+
+.answer-card p {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.video-player {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  display: block;
+  object-fit: contain;
+  border-radius: 12px;
+  background: black;
+}
+
+
+/* Relevant video frames */
+
+.relevant-frame-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.frame-card {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.visual-result {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.visual-result h3 {
+  margin-bottom: 15px;
+}
+
+.visual-result-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+/* =========================
+   PROCESSING STATUS
+   ========================= */
+
+.processing-status {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.processing-status p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   MULTIMODAL CONTENT UNDERSTANDING — UI POLISH
+   Add this entire block at the END of App.css
+   ========================================================= */
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+.header h1 {
+  color: #111827 !important;
+  opacity: 1 !important;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.header p {
+  color: #6b7280;
+  font-size: 17px;
+}
+
+
+/* =========================
+   SECTION HEADINGS
+   ========================= */
+
+.video-card h2,
+.question-card h2,
+.answer-card h2 {
+  color: #111827 !important;
+  opacity: 1 !important;
+  font-weight: 700;
+}
+
+.video-card h2 {
+  font-size: 24px;
+}
+
+.question-card h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.answer-card h2 {
+  font-size: 24px;
+}
+
+
+/* =========================
+   YOUTUBE INPUT
+   ========================= */
+
+.youtube-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.youtube-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1f2937;
+  background: #ffffff;
+}
+
+.youtube-input input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.youtube-input button,
+.input-area button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.youtube-input button:hover,
+.input-area button:hover {
+  background: #4338ca;
+}
+
+.youtube-input button:disabled,
+.input-area button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   QUESTION SECTION
+   ========================= */
+
+.question-card {
+  margin-top: 25px;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1f2937;
+  background: #ffffff;
+}
+
+.input-area input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+
+/* =========================
+   ANSWER TEXT
+   ========================= */
+
+.answer-card p {
+  color: #374151;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   PROCESSING STATUS
+   ========================= */
+
+.processing-status {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  color: #374151;
+}
+
+.processing-status p {
+  margin: 0;
+  color: #374151;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+
+/* =========================
+   RELATED CONCEPT VISUAL
+   ========================= */
+
+.visual-result {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.visual-result h3 {
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.visual-result p {
+  color: #4b5563;
+}
+
+.visual-result-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+
+/* =========================
+   RELEVANT VIDEO FRAMES
+   ========================= */
+
+.relevant-frames h3 {
+  color: #1f2937;
+}
+
+.frame-card p {
+  color: #4b5563;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVENESS
+   ========================= */
+
+@media (max-width: 700px) {
+
+  .youtube-input,
+  .input-area {
+    flex-direction: column;
+  }
+
+  .youtube-input button,
+  .input-area button {
+    width: 100%;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+}
+
+/* =========================
+   VIDEO UPLOAD BOX
+   ========================= */
+
+.upload-box {
+  display: block;
+  width: 100%;
+  padding: 32px 20px;
+  margin-top: 20px;
+  border: 2px dashed #c7d2fe;
+  border-radius: 14px;
+  background: #f8f9ff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.upload-box:hover {
+  border-color: #6366f1;
+  background: #f5f3ff;
+}
+
+.upload-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.upload-title {
+  color: #1f2937;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.upload-subtitle {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+/* =========================
+   YOUTUBE SECTION
+   ========================= */
+
+.youtube-section {
+  margin-top: 25px;
+}
+
+.youtube-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.youtube-divider::before,
+.youtube-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.youtube-title {
+  margin-bottom: 12px;
+  color: #1f2937;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   DARK CINEMATIC THEME
+   Black background + white text + red headings
+   ========================================================= */
+
+/* =========================
+   MAIN PAGE
+   ========================= */
+
+body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+#root {
+  background: #000000 !important;
+  min-height: 100vh;
+}
+
+.app {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+.header {
+  background: #000000 !important;
+}
+
+.header h1 {
+  color: #ff1a1a !important;
+  opacity: 1 !important;
+  font-size: 44px !important;
+  font-weight: 900 !important;
+  letter-spacing: -1px;
+  margin-bottom: 14px;
+}
+
+.header p {
+  color: #d1d5db !important;
+  font-size: 17px;
+}
+
+
+/* =========================
+   ALL MAIN HEADINGS
+   ========================= */
+
+.video-card h2,
+.question-card h2,
+.answer-card h2 {
+  color: #ff1a1a !important;
+  opacity: 1 !important;
+  font-size: 28px !important;
+  font-weight: 900 !important;
+}
+
+
+/* =========================
+   CARDS
+   ========================= */
+
+.video-card,
+.question-card,
+.answer-card {
+  background: #080808 !important;
+  color: #ffffff !important;
+  border: 1px solid #242424;
+}
+
+
+/* =========================
+   UPLOAD BOX
+   ========================= */
+
+.upload-box {
+  background: #080808 !important;
+  border: 2px dashed #555555 !important;
+  color: #ffffff !important;
+}
+
+.upload-box:hover {
+  background: #111111 !important;
+  border-color: #ff1a1a !important;
+}
+
+.upload-icon {
+  font-size: 40px;
+}
+
+.upload-title {
+  color: #ffffff !important;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.upload-subtitle {
+  color: #b3b3b3 !important;
+}
+
+
+/* =========================
+   OR DIVIDER
+   ========================= */
+
+.youtube-divider {
+  color: #888888 !important;
+}
+
+.youtube-divider::before,
+.youtube-divider::after {
+  background: #333333 !important;
+}
+
+
+/* =========================
+   YOUTUBE SECTION
+   ========================= */
+
+.youtube-title {
+  color: #ffffff !important;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+
+/* =========================
+   INPUTS
+   ========================= */
+
+.youtube-input input,
+.input-area input {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border: 1px solid #444444 !important;
+}
+
+.youtube-input input::placeholder,
+.input-area input::placeholder {
+  color: #888888 !important;
+}
+
+.youtube-input input:focus,
+.input-area input:focus {
+  border-color: #ff1a1a !important;
+  box-shadow: 0 0 0 3px rgba(255, 26, 26, 0.15) !important;
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.youtube-input button,
+.input-area button {
+  background: #e50914 !important;
+  color: #ffffff !important;
+  font-weight: 800;
+  border: none;
+}
+
+.youtube-input button:hover,
+.input-area button:hover {
+  background: #ff1a1a !important;
+}
+
+.youtube-input button:disabled,
+.input-area button:disabled {
+  background: #555555 !important;
+  color: #aaaaaa !important;
+}
+
+
+/* =========================
+   PROCESSING STATUS
+   ========================= */
+
+.processing-status {
+  background: #0d0d0d !important;
+  border: 1px solid #333333 !important;
+  color: #ffffff !important;
+}
+
+.processing-status p {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+
+/* =========================
+   SUMMARY / ANSWER TEXT
+   ========================= */
+
+.answer-card p {
+  color: #eeeeee !important;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+
+/* =========================
+   RELATED CONCEPT VISUAL
+   ========================= */
+
+.visual-result {
+  background: #050505 !important;
+  border: 1px solid #292929 !important;
+}
+
+.visual-result h3 {
+  color: #ff1a1a !important;
+  font-size: 21px;
+  font-weight: 850;
+}
+
+.visual-result p {
+  color: #bdbdbd !important;
+}
+
+.visual-result-image {
+  background: #000000 !important;
+  border: 1px solid #333333;
+}
+
+
+/* =========================
+   RELEVANT VIDEO FRAMES
+   ========================= */
+
+.relevant-frames {
+  border-top: 1px solid #333333 !important;
+}
+
+.relevant-frames h3 {
+  color: #ff1a1a !important;
+  font-size: 21px;
+  font-weight: 850;
+}
+
+.frame-card {
+  background: #0a0a0a !important;
+  border: 1px solid #292929 !important;
+}
+
+.frame-card p {
+  color: #cccccc !important;
+}
+
+.frame-card p:first-of-type {
+  color: #ffffff !important;
+}
+
+
+/* =========================
+   VIDEO PLAYER
+   ========================= */
+
+.video-player {
+  background: #000000 !important;
+  border: 1px solid #333333;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 700px) {
+
+  .header h1 {
+    font-size: 32px !important;
+  }
+
+  .video-card h2,
+  .question-card h2,
+  .answer-card h2 {
+    font-size: 24px !important;
+  }
+
+  .youtube-input,
+  .input-area {
+    flex-direction: column;
+  }
+
+  .youtube-input button,
+  .input-area button {
+    width: 100%;
+  }
+}
+
+/* BLUE BORDERS */
+.video-card,
+.question-card,
+.answer-card {
+  border: 1px solid #2563eb !important;
+}
+
+/* Upload box */
+.upload-box {
+  border: 2px dashed #2563eb !important;
+}
+
+.upload-box:hover {
+  border-color: #3b82f6 !important;
+}
+
+/* Inputs */
+.youtube-input input,
+.input-area input {
+  border: 1px solid #2563eb !important;
+}
+
+/* Video player */
+.video-player {
+  border: 1px solid #2563eb !important;
+}
+
+/* Processing status */
+.processing-status {
+  border: 1px solid #2563eb !important;
+}
+
+/* Concept visual */
+.visual-result {
+  border: 1px solid #2563eb !important;
+}
+
+/* Relevant frame cards */
+.frame-card {
+  border: 1px solid #2563eb !important;
+}
+
+/* Images */
+.visual-result-image {
+  border: 1px solid #2563eb !important;
+}
+
+/* =========================================================
+   CINEMATIC HERO
+   ========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 650px;
+  width: 100%;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 75% 25%,
+      rgba(37, 99, 235, 0.45),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #020617 45%,
+      #061b3a 100%
+    );
+
+  color: white;
+  border-bottom: 1px solid #2563eb;
+}
+
+/* subtle cinematic blue glow */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(37, 99, 235, 0.12),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+/* dotted background */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: radial-gradient(
+    rgba(255,255,255,0.16) 1px,
+    transparent 1px
+  );
+
+  background-size: 28px 28px;
+  opacity: 0.25;
+
+  pointer-events: none;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,0.75),
+      rgba(0,0,0,0.2),
+      rgba(0,0,0,0.45)
+    );
+
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  min-height: 650px;
+  max-width: 1400px;
+
+  margin: 0 auto;
+  padding: 42px 7%;
+
+  box-sizing: border-box;
+}
+
+/* BRAND */
+
+.hero-brand {
+  position: absolute;
+  top: 42px;
+  left: 7%;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+/* TOP RIGHT */
+
+.hero-top-right {
+  position: absolute;
+  top: 48px;
+  right: 7%;
+
+  color: #dbeafe;
+
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+
+  padding-left: 24px;
+
+  border-left: 2px solid #2563eb;
+}
+
+/* MAIN CONTENT */
+
+.hero-main {
+  position: absolute;
+
+  left: 7%;
+  top: 50%;
+
+  transform: translateY(-42%);
+
+  max-width: 850px;
+}
+
+.hero-main h1 {
+  margin: 0;
+
+  color: #ffffff !important;
+
+  font-size: clamp(64px, 8vw, 125px);
+  line-height: 0.9;
+
+  font-weight: 950;
+
+  letter-spacing: -5px;
+}
+
+.hero-main h1 span {
+  color: #3b82f6;
+}
+
+/* DESCRIPTION */
+
+.hero-main p {
+  margin-top: 45px;
+
+  color: #f8fafc !important;
+
+  font-size: clamp(20px, 2vw, 30px);
+
+  line-height: 1.5;
+
+  font-weight: 400;
+}
+
+/* BLUE LINE */
+
+.hero-line {
+  width: 110px;
+  height: 4px;
+
+  margin-top: 32px;
+
+  background: #2563eb;
+
+  box-shadow:
+    0 0 15px rgba(37, 99, 235, 0.8);
+}
+
+/* SMALL PROJECT DESCRIPTION */
+
+.hero-main .hero-description {
+  margin-top: 18px;
+
+  color: #94a3b8 !important;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+/* SCROLL */
+
+.hero-scroll {
+  position: absolute;
+
+  bottom: 35px;
+  left: 7%;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.scroll-line {
+  width: 70px;
+  height: 1px;
+
+  background: #2563eb;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .hero,
+  .hero-content {
+    min-height: 600px;
+  }
+
+  .hero-content {
+    padding: 30px 7%;
+  }
+
+  .hero-brand {
+    top: 30px;
+    font-size: 16px;
+  }
+
+  .hero-top-right {
+    display: none;
+  }
+
+  .hero-main {
+    top: 48%;
+  }
+
+  .hero-main h1 {
+    font-size: 62px;
+    letter-spacing: -3px;
+  }
+
+  .hero-main p {
+    font-size: 18px;
+  }
+
+  .hero-main br {
+    display: none;
+  }
+}
+
+/* =========================================================
+   ALL HEADINGS → BLUE
+   ========================================================= */
+
+.header h1,
+.video-card h2,
+.question-card h2,
+.answer-card h2,
+.youtube-title,
+.visual-result h3,
+.relevant-frames h3 {
+  color: #2563eb !important;
+  opacity: 1 !important;
+  font-weight: 900 !important;
+}
+
+/* =========================================================
+   MULTIMODAL AI SIDE PIPELINES
+   ========================================================= */
+
+.hero-pipeline {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+
+  color: #2563eb;
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 3px;
+
+  opacity: 0.8;
+}
+
+/* LEFT */
+
+.hero-pipeline-left {
+  left: 3%;
+}
+
+/* RIGHT */
+
+.hero-pipeline-right {
+  right: 3%;
+}
+
+/* PIPELINE LABELS */
+
+.hero-pipeline span {
+  padding: 10px 14px;
+
+  border: 1px solid rgba(37, 99, 235, 0.6);
+  border-radius: 4px;
+
+  background: rgba(37, 99, 235, 0.05);
+
+  box-shadow:
+    0 0 15px rgba(37, 99, 235, 0.08);
+
+  white-space: nowrap;
+}
+
+/* CONNECTING LINE */
+
+.hero-pipeline i {
+  display: block;
+
+  width: 1px;
+  height: 35px;
+
+  background: #2563eb;
+
+  position: relative;
+}
+
+/* GLOWING DATA NODE */
+
+.hero-pipeline i::after {
+  content: "";
+
+  position: absolute;
+
+  width: 6px;
+  height: 6px;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background: #2563eb;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 8px #2563eb,
+    0 0 18px rgba(37, 99, 235, 0.8);
+}
+
+/* SUBTLE ANIMATION */
+
+@keyframes dataPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-pipeline i::after {
+  animation: dataPulse 2s ease-in-out infinite;
+}
+
+/* MOBILE */
+
+@media (max-width: 1000px) {
+  .hero-pipeline {
+    display: none;
+  }
+}

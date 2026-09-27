@@ -1,0 +1,12 @@
+data/
+backend/data/
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+node_modules/
+.DS_Store
+*.alias
+multimodalcontentretrivalproject alias
+.env
