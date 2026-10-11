@@ -190,6 +190,19 @@ to the video when relevant.
 report about the evidence used to generate the answer.
 
 Answer the CURRENT QUESTION directly.
+
+IMPORTANT REASONING INSTRUCTIONS:
+
+- Use the transcript as the primary source of information.
+- Use visual descriptions only as supporting context.
+- Do not assume that a scene, logo, location, or person explains the meaning of a song or video.
+- When giving an opinion, clearly distinguish your interpretation from facts stated in the video.
+- If the video does not provide enough information to determine the meaning, say so rather than inventing an explanation.
+- Connect your answer to specific evidence from the transcript whenever possible.
+- Avoid repeating visual descriptions that do not directly answer the question.
+- Always respond in clear, natural English.
+- Never invent lyrics, events, intentions, or facts that are not supported by the available context.
+
 """
 
     # -----------------------------------------

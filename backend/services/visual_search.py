@@ -1,3 +1,5 @@
+
+import re
 import requests
 
 
@@ -6,21 +8,40 @@ def search_visual(query):
     Search Wikimedia Commons for a relevant image.
     """
 
-    query = query.strip()
-
-    if not query:
+    if not query or not query.strip():
         return None
+
+    # Remove common question words to focus on the topic.
+    stop_words = {
+        "is", "are", "was", "were", "the", "a", "an",
+        "this", "that", "it", "about", "what", "why",
+        "how", "in", "of", "for", "to", "with",
+        "do", "does", "can", "could", "would",
+        "my", "your", "you", "me", "we"
+    }
+
+    cleaned_query = re.sub(r"[^\w\s'-]", " ", query)
+
+    keywords = [
+        word for word in cleaned_query.split()
+        if word.lower() not in stop_words
+    ]
+
+    search_query = " ".join(keywords)
+
+    if not search_query:
+        search_query = query.strip()
 
     url = "https://commons.wikimedia.org/w/api.php"
 
     params = {
         "action": "query",
         "generator": "search",
-        "gsrsearch": query,
+        "gsrsearch": search_query,
         "gsrnamespace": 6,
-        "gsrlimit": 1,
+        "gsrlimit": 10,
         "prop": "imageinfo",
-        "iiprop": "url",
+        "iiprop": "url|mime",
         "iiurlwidth": 600,
         "format": "json"
     }
@@ -40,20 +61,34 @@ def search_visual(query):
 
     pages = data.get("query", {}).get("pages", {})
 
-    if not pages:
-        return None
+    # Check multiple results instead of blindly taking the first.
+    for page in pages.values():
 
-    page = next(iter(pages.values()))
+        imageinfo = page.get("imageinfo", [])
 
-    imageinfo = page.get("imageinfo", [])
+        if not imageinfo:
+            continue
 
-    if not imageinfo:
-        return None
+        image = imageinfo[0]
 
-    image = imageinfo[0]
+        # Ignore PDFs and other non-image files.
+        mime_type = image.get("mime", "")
 
-    return {
-        "query": query,
-        "title": page.get("title", ""),
-        "image_url": image.get("thumburl") or image.get("url")
-    }
+        if not mime_type.startswith("image/"):
+            continue
+
+        image_url = (
+            image.get("thumburl")
+            or image.get("url")
+        )
+
+        if not image_url:
+            continue
+
+        return {
+            "query": search_query,
+            "title": page.get("title", ""),
+            "image_url": image_url
+        }
+
+    return None

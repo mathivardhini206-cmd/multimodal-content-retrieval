@@ -13,29 +13,22 @@ function App() {
   const [video, setVideo] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("auto");
 
-  // =========================
-  // REFRESH PAGE
-  // =========================
+  // Build a thumbnail image URL from a YouTube link (no backend needed).
+  const getYoutubeThumb = (url) => {
+    if (!url) return "";
+    const match = url.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
+    return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : "";
+  };
 
   const refreshPage = () => {
     window.location.reload();
   };
 
-  // =========================
-  // BACK TO TOP
-  // =========================
-
   const goToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  // =========================
-  // START NEW VIDEO
-  // =========================
 
   const resetProject = () => {
     setQuestion("");
@@ -49,20 +42,15 @@ function App() {
     setVideo(null);
     setVideoUrl("");
     setYoutubeUrl("");
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    setSelectedLanguage("auto");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // =========================
   // VIDEO UPLOAD
   // =========================
-
   const handleVideoChange = async (event) => {
     const selectedVideo = event.target.files[0];
-
     if (!selectedVideo) return;
 
     setVideo(selectedVideo);
@@ -79,15 +67,13 @@ function App() {
 
     const formData = new FormData();
     formData.append("video", selectedVideo);
+    formData.append("language", selectedLanguage);
 
     try {
-      const response = await fetch(
-        "http://127.0.0.1:5050/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("http://127.0.0.1:5050/upload", {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await response.json();
 
@@ -100,7 +86,6 @@ function App() {
       }
     } catch (error) {
       console.error(error);
-
       setProcessingStatus("");
       alert("Could not connect to the backend.");
     }
@@ -111,7 +96,6 @@ function App() {
   // =========================
   // YOUTUBE PROCESSING
   // =========================
-
   const processYouTubeVideo = async () => {
     if (!youtubeUrl.trim()) {
       alert("Please paste a YouTube URL.");
@@ -128,18 +112,11 @@ function App() {
     setChatHistory([]);
 
     try {
-      const response = await fetch(
-        "http://127.0.0.1:5050/youtube",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            url: youtubeUrl,
-          }),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:5050/youtube", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: youtubeUrl, language: selectedLanguage }),
+      });
 
       const data = await response.json();
 
@@ -148,14 +125,10 @@ function App() {
         setProcessingStatus("✅ Video ready!");
       } else {
         setProcessingStatus("");
-        alert(
-          data.error ||
-            "YouTube processing failed."
-        );
+        alert(data.error || "YouTube processing failed.");
       }
     } catch (error) {
       console.error(error);
-
       setProcessingStatus("");
       alert("Could not connect to the backend.");
     }
@@ -166,484 +139,278 @@ function App() {
   // =========================
   // ASK QUESTION
   // =========================
-
   const askQuestion = async () => {
     if (!question.trim()) return;
+
+    const askedQuestion = question;
 
     setLoading(true);
     setAnswer("");
     setRelevantFrames([]);
 
     try {
-      const response = await fetch(
-        "http://127.0.0.1:5050/ask",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            question: question,
-            history: chatHistory,
-          }),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:5050/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: askedQuestion, history: chatHistory }),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
-        const newAnswer =
-          data.answer || "No answer received.";
-
+        const newAnswer = data.answer || "No answer received.";
         setAnswer(newAnswer);
-
-        setRelevantFrames(
-          data.relevant_frames || []
-        );
-
-        setVisual(
-          data.visual || null
-        );
-
-        setChatHistory(
-          (previousHistory) => [
-            ...previousHistory,
-            {
-              role: "user",
-              content: question,
-            },
-            {
-              role: "assistant",
-              content: newAnswer,
-            },
-          ]
-        );
-
+        setRelevantFrames(data.relevant_frames || []);
+        setVisual(data.visual || null);
+        setChatHistory((previousHistory) => [
+          ...previousHistory,
+          { role: "user", content: askedQuestion },
+          { role: "assistant", content: newAnswer },
+        ]);
         setQuestion("");
       } else {
-        setAnswer(
-          data.error ||
-            "Something went wrong."
-        );
+        setAnswer(data.error || "Something went wrong.");
       }
     } catch (error) {
       console.error(error);
-
-      setAnswer(
-        "Could not connect to the backend."
-      );
+      setAnswer("Could not connect to the backend.");
     }
 
     setLoading(false);
   };
 
-  // =========================
-  // FRONTEND
-  // =========================
+  const hasConversation = chatHistory.length > 0;
+  const youtubeThumb = getYoutubeThumb(youtubeUrl);
+  const hasResult = summary || videoUrl || youtubeThumb;
 
   return (
     <div className="app">
 
-      {/* =========================
-          FLOATING CONTROLS
-      ========================= */}
+      {/* background */}
+      <div className="mesh">
+        <span className="m1"></span>
+        <span className="m2"></span>
+        <span className="m3"></span>
+      </div>
+      <div className="grid-bg"></div>
 
+      {/* floating controls */}
       <div className="floating-controls">
-
-        <button
-          className="refresh-button"
-          onClick={refreshPage}
-          title="Refresh page"
-        >
-          ↻
-          <span>Refresh</span>
+        <button className="refresh-button" onClick={refreshPage} title="Refresh page">
+          ↻<span>Refresh</span>
         </button>
-
-        <button
-          className="top-button"
-          onClick={goToTop}
-          title="Back to top"
-        >
-          ↑
-          <span>Top</span>
+        <button className="top-button" onClick={goToTop} title="Back to top">
+          ↑<span>Top</span>
         </button>
-
       </div>
 
-      {/* =========================
-          HERO
-      ========================= */}
-
-      <header className="hero">
-
-        <div className="hero-pipeline hero-pipeline-left">
-
-          <span>VIDEO</span>
-          <i></i>
-
-          <span>AUDIO</span>
-          <i></i>
-
-          <span>TRANSCRIPT</span>
-
+      {/* top nav */}
+      <nav className="nav">
+        <div className="brand">
+          <span className="mark"><i className="t"></i><i className="a"></i></span>
+          <b>Multimodal<span> / video intelligence</span></b>
         </div>
-
-        <div className="hero-pipeline hero-pipeline-right">
-
-          <span>VISION</span>
-          <i></i>
-
-          <span>RETRIEVAL</span>
-          <i></i>
-
-          <span>AI ANSWER</span>
-
+        <div className="nav-right">
+          <span className="chip"><span className="d"></span>backend ready</span>
+          <button className="ghost" onClick={resetProject}>New video</button>
         </div>
+      </nav>
 
-        <div className="hero-overlay"></div>
+      <div className="wrap">
 
-        <div className="hero-content">
-
-          <div className="hero-brand">
-            MULTIMODAL AI
-          </div>
-
-          <div className="hero-top-right">
-            VIDEO INTELLIGENCE
-          </div>
-
-          <div className="hero-main">
-
-            <h1>
-              Understand
-              <br />
-              <span>Every Frame.</span>
-            </h1>
-
-            <p>
-              Upload a video and let AI understand what is
-              <br />
-              said, shown, and discussed.
-            </p>
-
-            <div className="hero-line"></div>
-
-            <p className="hero-description">
-              Multimodal Content Understanding &
-              Conversational Retrieval
-            </p>
-
-          </div>
-
-          <div className="hero-scroll">
-
-            <span>
-              SCROLL TO EXPLORE
-            </span>
-
-            <div className="scroll-line"></div>
-
-          </div>
-
-        </div>
-
-      </header>
-
-      {/* =========================
-          MAIN CONTENT
-      ========================= */}
-
-      <main className="container">
-
-        {/* =========================
-            VIDEO UPLOAD
-        ========================= */}
-
-        <section className="video-card">
-
-          <h2>
-            🎥 Upload Your Video
-          </h2>
-
-          <label className="upload-box">
-
-            <div className="upload-icon">
-              🎥
-            </div>
-
-            <div className="upload-title">
-              Upload a video
-            </div>
-
-            <div className="upload-subtitle">
-              Click here to choose a video file
-            </div>
-
-            <input
-              type="file"
-              accept="video/*"
-              onChange={handleVideoChange}
-              className="hidden-file-input"
-            />
-
-          </label>
-
-          {/* =========================
-              YOUTUBE
-          ========================= */}
-
-          <div className="youtube-section">
-
-            <div className="youtube-divider">
-              <span>OR</span>
-            </div>
-
-            <h3 className="youtube-title">
-              ▶️ Use a YouTube Video
-            </h3>
-
-            <div className="youtube-input">
-
-              <input
-                type="text"
-                value={youtubeUrl}
-                onChange={(e) =>
-                  setYoutubeUrl(e.target.value)
-                }
-                placeholder="Paste YouTube URL..."
-              />
-
-              <button
-                onClick={processYouTubeVideo}
-                disabled={loading}
-              >
-                {loading
-                  ? "Processing..."
-                  : "Process YouTube Video"}
-              </button>
-
-            </div>
-
-          </div>
-
-          {/* =========================
-              PROCESSING STATUS
-          ========================= */}
-
-          {processingStatus && (
-            <div className="processing-status">
-
-              <p>
-                {processingStatus}
-              </p>
-
-            </div>
-          )}
-
-          {/* =========================
-              VIDEO PREVIEW
-          ========================= */}
-
-          {videoUrl && (
-            <video
-              className="video-player"
-              controls
-            >
-
-              <source
-                src={videoUrl}
-                type={video?.type}
-              />
-
-              Your browser does not support
-              the video tag.
-
-            </video>
-          )}
-
+        {/* hero */}
+        <section className="hero">
+          <span className="eyebrow">speech · vision · retrieval</span>
+          <h1>Understand <span className="g">every frame.</span></h1>
+          <p>Drop a video or paste a link. The system listens, watches, and lets you have a real conversation about what was said and shown.</p>
         </section>
 
-        {/* =========================
-            SUMMARY
-        ========================= */}
+        {/* intake */}
+        <div className="intake">
+          <div className="pane">
+            <label className="drop">
+              <span className="ic">🎬</span>
+              <b>Upload a video</b>
+              <small>MP4, MOV, WEBM — click to choose a file</small>
+              <input
+                type="file"
+                accept="video/*"
+                onChange={handleVideoChange}
+                className="hidden-file-input"
+              />
+            </label>
+          </div>
+          <div className="pane">
+            <h3>or use a link</h3>
+            <div className="yt">
+              <div className="field">
+                <input
+                  type="text"
+                  value={youtubeUrl}
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                  placeholder="Paste a YouTube URL…"
+                />
+              </div>
+              <button className="btn" onClick={processYouTubeVideo} disabled={loading}>
+                {loading ? "Processing…" : "Process video"}
+              </button>
+              <div className="sel">Language
+                <select
+                  value={selectedLanguage}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                >
+                  <option value="auto">Auto detect</option>
+                  <option value="en">English</option>
+                  <option value="ta">Tamil</option>
+                  <option value="hi">Hindi</option>
+                  <option value="te">Telugu</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="kn">Kannada</option>
+                  <option value="bn">Bengali</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                  <option value="ja">Japanese</option>
+                  <option value="ko">Korean</option>
+                  <option value="zh">Chinese</option>
+                  <option value="ar">Arabic</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        {summary && (
-          <section className="answer-card">
-
-            <h2>
-              📝 Video Summary
-            </h2>
-
-            <p>
-              {summary}
-            </p>
-
-          </section>
+        {/* processing status */}
+        {processingStatus && (
+          <div className="processing-status">
+            <p>{processingStatus}</p>
+          </div>
         )}
 
-        {/* =========================
-            QUESTION
-        ========================= */}
+        {/* ---- SUMMARY (3/4) + VIDEO (1/4) row ---- */}
+        {hasResult && (
+          <div className="result-top">
 
-        <section className="question-card">
+            {summary && (
+              <div className="card summary-card">
+                <p className="label"><span className="bar teal"></span>Understanding</p>
+                <div className="tags">
+                  <span className="tag teal">summary in English</span>
+                </div>
+                <div className="summary">
+                  <p>{summary}</p>
+                </div>
+              </div>
+            )}
 
-          <h2>
-            Ask About the Video
-          </h2>
-
-          <div className="input-area">
-
-            <input
-              type="text"
-              value={question}
-              onChange={(e) =>
-                setQuestion(e.target.value)
-              }
-              onKeyDown={(e) => {
-
-                if (e.key === "Enter") {
-                  askQuestion();
-                }
-
-              }}
-              placeholder="Ask something about the video..."
-            />
-
-            <button
-              onClick={askQuestion}
-              disabled={loading}
-            >
-              {loading
-                ? "Thinking..."
-                : "Ask"}
-            </button>
+            {(videoUrl || youtubeThumb) && (
+              <div className="card video-side">
+                <p className="label"><span className="bar teal"></span>Video</p>
+                {videoUrl ? (
+                  <video className="video-player" controls>
+                    <source src={videoUrl} type={video?.type} />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img className="yt-thumb" src={youtubeThumb} alt="Video thumbnail" />
+                )}
+              </div>
+            )}
 
           </div>
+        )}
 
-        </section>
+        {/* ---- ASK BAR ---- */}
+        <div className="asktop">
+          <textarea
+            rows="1"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                askQuestion();
+              }
+            }}
+            placeholder="Ask about what was said or shown…"
+          />
+          <button className="send" onClick={askQuestion} disabled={loading}>
+            {loading ? "Thinking…" : "Ask"}
+          </button>
+        </div>
 
-        {/* =========================
-            AI ANSWER
-        ========================= */}
+        {/* ---- ANSWERS ---- */}
+        {(hasConversation || loading) && (
+          <section className="card convo">
+            <div className="stream">
 
-        {answer && (
-
-          <section className="answer-card">
-
-            <h2>
-              🤖 AI Answer
-            </h2>
-
-            <p>
-              {answer}
-            </p>
-
-            {/* =========================
-                RELATED CONCEPT VISUAL
-            ========================= */}
-
-            {visual &&
-              visual.image_url && (
-
-                <div className="visual-result">
-
-                  <h3>
-                    🌐 Related Concept Visual
-                  </h3>
-
-                  <img
-                    src={visual.image_url}
-                    alt={visual.query}
-                    className="visual-result-image"
-                  />
-
-                  <p>
-                    {visual.title}
-                  </p>
-
-                </div>
-
+              {chatHistory.map((msg, index) =>
+                msg.role === "user" ? (
+                  <div className="q" key={index}>{msg.content}</div>
+                ) : (
+                  <div className="a" key={index}>
+                    <div className="txt">{msg.content}</div>
+                  </div>
+                )
               )}
 
-            {/* =========================
-                RELEVANT VIDEO FRAMES
-            ========================= */}
+              {loading && (
+                <div className="thinking"><span className="d"></span>Thinking…</div>
+              )}
 
-            {relevantFrames.length > 0 && (
+              {/* evidence for the latest answer */}
+              {(relevantFrames.length > 0 || (visual && visual.image_url)) && (
+                <div className="ev">
 
-              <div className="relevant-frames">
-
-                <h3>
-                  🎬 Relevant Video Frames
-                </h3>
-
-                <div className="frame-grid">
-
-                  {relevantFrames.map(
-                    (item, index) => (
-
-                      <div
-                        className="frame-card"
-                        key={index}
-                      >
-
-                        <img
-                          src={`http://127.0.0.1:5050/frames/${item.frame_path}`}
-                          alt={`Relevant video frame ${
-                            index + 1
-                          }`}
-                          className="relevant-frame-image"
-                        />
-
-                        <p>
-                          <strong>
-                            {item.frame}
-                          </strong>
-                        </p>
-
-                        <p>
-                          {item.description}
-                        </p>
-
+                  {relevantFrames.length > 0 && (
+                    <>
+                      <div className="cap">frames from the video</div>
+                      <div className="frames">
+                        {relevantFrames.map((item, index) => (
+                          <div className="fr" key={index}>
+                            <img
+                              className="fr-im"
+                              src={`http://127.0.0.1:5050/frames/${item.frame_path}`}
+                              alt={`Relevant video frame ${index + 1}`}
+                            />
+                            <div className="fr-t">{item.frame}</div>
+                            <div className="fr-c">{item.description}</div>
+                          </div>
+                        ))}
                       </div>
+                    </>
+                  )}
 
-                    )
+                  {visual && visual.image_url && (
+                    <div className="concept">
+                      <img className="concept-im" src={visual.image_url} alt={visual.query} />
+                      <div className="ct">
+                        <b>Related concept image</b>
+                        {visual.title}
+                        <div className="cx">EXTERNAL · WIKIMEDIA — NOT VIDEO EVIDENCE</div>
+                      </div>
+                    </div>
                   )}
 
                 </div>
-
-              </div>
-
-            )}
-
-            {/* =========================
-                START NEW VIDEO
-            ========================= */}
-
-            <div className="answer-actions">
-
-              <button
-                className="new-video-button"
-                onClick={resetProject}
-              >
-                + Start Another Video
-              </button>
-
-              <button
-                className="top-action-button"
-                onClick={goToTop}
-              >
-                ↑ Back to Top
-              </button>
+              )}
 
             </div>
 
+            {hasConversation && (
+              <div className="answer-actions">
+                <button className="new-video-button" onClick={resetProject}>
+                  + Start Another Video
+                </button>
+                <button className="top-action-button" onClick={goToTop}>
+                  ↑ Back to Top
+                </button>
+              </div>
+            )}
           </section>
-
         )}
 
-      </main>
-
+      </div>
     </div>
   );
 }

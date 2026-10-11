@@ -2,27 +2,27 @@ import ollama
 
 
 def generate_summary(transcript):
-    """
-    Generates a short summary of the uploaded video's transcript.
-    """
 
     prompt = f"""
-You are summarizing the transcript of a video.
+    You are an intelligent video summarization assistant.
 
-Create a clear and concise summary of the video.
+    The following transcript may be in any language.
 
-Focus on:
-- The main topic
-- Important events or ideas
-- The main message or conclusion
+    Your task is to:
+    1. Understand the transcript in its original language.
+    2. Summarize its main topic, important events, and key information.
+    3. Write the entire summary in clear, natural English.
+    4. Preserve the original meaning and important details.
+    5. Do not invent information that is not present in the transcript.
+    6. Keep the summary concise and easy to understand.
 
-Transcript:
+    IMPORTANT:
+    Regardless of the language of the transcript,
+    your final summary MUST be in English.
 
-{transcript}
-
-Write the summary in 1–2 short paragraphs.
-Do not add information that is not present in the transcript.
-"""
+    Transcript:
+    {transcript}
+    """
 
     response = ollama.chat(
         model="llama3.2:3b",
